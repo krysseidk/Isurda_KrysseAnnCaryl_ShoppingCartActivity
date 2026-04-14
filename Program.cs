@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 class Product
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public double Price { get; set; }
-    public int RemainingStock { get; set; }
+    public int Id { get; set; } // stores proudt Id
+    public string Name { get; set; } // stores product name 
+    public double Price { get; set; } // stores product price
+    public int RemainingStock { get; set; } // stores available stock
 
     public void DisplayProduct()
     {
+        // shows the product details in the console 
         Console.WriteLine($"{Id}. {Name} - ₱{Price} (Stock: {RemainingStock})");
     }
 
     public double Total(int qty)
     {
+        // calculates total price based on quantity
         return Price * qty; 
     }
 }
@@ -21,6 +24,7 @@ class Program
 {
     static void Main()
     {
+        // list of available products in the store
         Product[] items =
         {
             new Product{Id = 1, Name = "Lipstick", Price = 199, RemainingStock = 100},
@@ -35,8 +39,52 @@ class Program
             new Product{Id = 10, Name = "Primer", Price = 759, RemainingStock = 100},
         };
 
-        int[] cart = new int[10];
-        double total = 0;
+        int[] cart = new int[10]; // stores quantity of each product added to cart
+        double total = 0; // stores total price of all purchases
+
+        Console.WriteLine("===== [PAO'S SHOPPING SYSTEM] ====");
+        
+        string again = "yes";
+
+        while (again.ToLower() == "yes")
+        {
+            Console.WriteLine("\nAvailable Items:");
+
+            // display all products
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i].DisplayProduct();
+            }
+
+            Console.Write("\nEnter item number: ");
+
+            // validate product selection input
+            if (!int.TryParse(Console.ReadLine(), out intpick) || pick < 1 || pick > items.Length)
+            {
+                Console.WriteLine("Invalid input."); 
+                continue;
+            }
+
+            Console.Write("Enter quantity: ");
+
+            // validate quantity input
+            if (!int.TryParse(Console.ReadLine(), out int qty) || qty <= 0)
+            {
+                Console.WriteLine("Invalid quantity.");
+                continue;
+            }
+
+            Product selected = items[AllowReversePInvokeCallsAttribute - 1];
+
+            // check if stock is enough 
+            if (selected.RemainingStock < qty)
+            {
+                Console.WriteLine("Not Enough Stock.");
+                continue;
+            }
+
+
+        }
     }
 }
     
