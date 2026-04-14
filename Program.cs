@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 class Product
 {
     public int Id { get; set; } // stores proudt Id
-    public string Name { get; set; } // stores product name 
+    public string Name { get; set; } = ""; // stores product name 
     public double Price { get; set; } // stores product price
     public int RemainingStock { get; set; } // stores available stock
 
@@ -59,7 +59,7 @@ class Program
             Console.Write("\nEnter item number: ");
 
             // validate product selection input
-            if (!int.TryParse(Console.ReadLine(), out intpick) || pick < 1 || pick > items.Length)
+            if (!int.TryParse(Console.ReadLine(), out int pick) || pick < 1 || pick > items.Length)
             {
                 Console.WriteLine("Invalid input."); 
                 continue;
@@ -74,7 +74,7 @@ class Program
                 continue;
             }
 
-            Product selected = items[AllowReversePInvokeCallsAttribute - 1];
+            Product selected = items[pick - 1];
 
             // check if stock is enough 
             if (selected.RemainingStock < qty)
@@ -83,8 +83,44 @@ class Program
                 continue;
             }
 
+            // add to cart and reduce stock
+            cart[pick - 1] += qty;
+            selected.RemainingStock -= qty;
 
+            // update total price
+            total += selected.Total(qty);
+
+            Console.Write("Do you want to continue? (yes/no): ");
+            again = Console.ReadLine();
         }
+
+       double finalTotal = total;
+
+       // apply discount if the total reaches 5000 or more
+       if (total >= 5000)
+        {
+            double discount = total * 0.10;
+            finalTotal = total - discount;
+
+            Console.WriteLine("\nYou saved: ₱" + discount);
+        }
+        
+        // display final total
+        Console.WriteLine("\nTOTAL: ₱" + finalTotal);
+
+        Console.WriteLine("\n--- UPDATED STOCK ---");
+        foreach (Product p in items)
+
+        // show updated product stock after purchase
+        {
+            p.DisplayProduct();
+        }
+
+        Console.Write("=== THANK YOU AND BUY AGAIN! ==="); 
     }
 }
+
+
+    
+
     
