@@ -94,33 +94,48 @@ class Program
             again = Console.ReadLine();
         }
 
-       double finalTotal = total;
+        // apply discount if the total reaches 5000 or more
+        double finalTotal = total;
+        double discount = 0;
 
-       // apply discount if the total reaches 5000 or more
-       if (total >= 5000)
+        if (total >= 5000)
         {
-            double discount = total * 0.10;
+            discount = total * 0.10;
             finalTotal = total - discount;
-
-            Console.WriteLine("\nYou saved: ₱" + discount);
         }
-        
-        // display final total
-        Console.WriteLine("\nTOTAL: ₱" + finalTotal);
 
-        Console.WriteLine("\n--- UPDATED STOCK ---");
-        foreach (Product p in items)
 
-        // show updated product stock after purchase
+        Console.WriteLine("\n--- RECEIPT ---");
+
+        for (int i = 0; i < items.Length; i++)
         {
-            p.DisplayProduct();
-        }
-
-        Console.Write("=== THANK YOU AND BUY AGAIN! ==="); 
-    }
+            if (cart[i] > 0)
+            {
+                double subtotal = items[i].Price * cart[i];
+                Console.WriteLine($"{items[i].Name} x{cart[i]} = ₱{subtotal}");
+            }
 }
 
 
-    
+        Console.WriteLine("\nSubtotal: ₱" + total);
 
-    
+        if (discount > 0)
+        {
+            Console.WriteLine("Discount: ₱" + discount);
+            Console.WriteLine("You saved: ₱" + discount);
+        }
+
+        Console.WriteLine("TOTAL: ₱" + finalTotal); 
+
+        Console.WriteLine("\n--- UPDATED STOCK ---");
+
+        foreach (Product p in items)
+        {
+             p.DisplayProduct(); 
+        }     
+
+Console.Write("=== THANK YOU AND BUY AGAIN! ===");
+
+        
+    }
+}
