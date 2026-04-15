@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 class Product
 {
-    public int Id { get; set; } // stores proudt Id
+    public int Id { get; set; } // stores product Id
     public string Name { get; set; } = ""; // stores product name 
     public double Price { get; set; } // stores product price
     public int RemainingStock { get; set; } // stores available stock
@@ -46,7 +45,7 @@ class Program
         
         string again = "yes";
 
-        while (again.ToLower() == "yes")
+        while (again != null && again.ToLower() == "yes")
         {
             Console.WriteLine("\nAvailable Items:");
 
@@ -87,11 +86,13 @@ class Program
             cart[pick - 1] += qty;
             selected.RemainingStock -= qty;
 
+            Console.WriteLine("Item successfully added to cart!");
+
             // update total price
             total += selected.Total(qty);
 
             Console.Write("Do you want to continue? (yes/no): ");
-            again = Console.ReadLine();
+            again = Console.ReadLine() ?? "no";
         }
 
         // apply discount if the total reaches 5000 or more
@@ -125,7 +126,7 @@ class Program
             Console.WriteLine("You saved: ₱" + discount);
         }
 
-        Console.WriteLine("TOTAL: ₱" + finalTotal); 
+        Console.WriteLine("GRAND TOTAL: ₱" + finalTotal); 
 
         Console.WriteLine("\n--- UPDATED STOCK ---");
 
@@ -134,8 +135,7 @@ class Program
              p.DisplayProduct(); 
         }     
 
-Console.Write("=== THANK YOU AND BUY AGAIN! ===");
-
-        
+        Console.WriteLine("=== THANK YOU AND BUY AGAIN! ===");
+    
     }
 }
