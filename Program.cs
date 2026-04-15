@@ -42,10 +42,11 @@ class Program
         double total = 0; // stores total price of all purchases
 
         Console.WriteLine("===== [PAO'S SHOPPING SYSTEM] ====");
+        Console.WriteLine("Buy ₱5000 and above to get 10% discount!\n");
         
         string again = "yes";
 
-        while (again != null && again.ToLower() == "yes")
+        while ((again ?? "").ToLower() == "yes")
         {
             Console.WriteLine("\nAvailable Items:");
 
@@ -78,11 +79,30 @@ class Program
             // check if stock is enough 
             if (selected.RemainingStock < qty)
             {
-                Console.WriteLine("Not Enough Stock.");
+                Console.WriteLine("Not enough stock available.");
                 continue;
             }
 
-            // add to cart and reduce stock
+            // count how many product slots are already used
+            int usedSlots = 0;
+            for (int i = 0; i < cart.Length; i++)
+            {
+                if (cart[i] > 0) usedSlots++;
+            }
+            
+            if (usedSlots >= cart.Length && cart [pick - 1] == 0)
+            {
+                Console.WriteLine("Cart is full.");
+                continue;
+            }
+
+            // if new item and cart is full
+            if (cart[pick - 1] > 0)
+            {
+                Console.WriteLine("Item already in cart. Updating quantity...");
+            }
+           
+            // proceed to add/update cart
             cart[pick - 1] += qty;
             selected.RemainingStock -= qty;
 
