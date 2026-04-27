@@ -6,6 +6,10 @@
 
  ## AI Usage in This Project
 
+ AI tools (ChatGPT) were used as a learning and debugging assistant during development. It helped me understand C# concepts such as input validation, checkout logic, receipt formatting, and Git troubleshooting. All final implementation and decision-making were done manually by me.
+
+ Specifically, AI was used for the following:
+
 “What is int.TryParse and how is it used in C#?”
 – Used to understand how int.TryParse works for validating user input and preventing the program from crashing when invalid data is entered.
 
