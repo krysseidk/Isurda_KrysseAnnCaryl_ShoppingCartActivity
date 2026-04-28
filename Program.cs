@@ -128,7 +128,7 @@ class Program
        string[]orderHistory = new string [50]; // store receipts
        int orderCount = 0;
 
-       while (choice != 6)
+       while (true)
         {
             Console.WriteLine("\n===== SHOPPING MENU =====");
             Console.WriteLine("1. View Products");
@@ -137,6 +137,8 @@ class Program
             Console.WriteLine("4. Remove Item");
             Console.WriteLine("5. Clear Cart");
             Console.WriteLine("6. Checkout");
+            Console.WriteLine("7. View Order History");
+            Console.WriteLine("8. Exit");
             Console.Write("Choose: ");
 
             int.TryParse(Console.ReadLine(), out choice);
@@ -175,10 +177,16 @@ class Program
                     Console.Write("Enter product ID: ");
                     int.TryParse(Console.ReadLine(), out int id);
 
+                    if (id < 1 || id > items.Length)
+                    {
+                        Console.WriteLine("Invalid product ID.");
+                        break;
+                    }
+
                     Console.Write("Enter quantity: ");
                     int.TryParse(Console.ReadLine(), out int qty);
 
-                    Product selected = null;
+                    Product? selected = null;
 
                      // find product
                      foreach (var p in items)
@@ -202,7 +210,7 @@ class Program
                         Console.WriteLine("Not enough stock.");
                         break;
                     }
-
+                
                     // add to cart
                     cart[id - 1] += qty;
                     selected.RemainingStock -= qty;
@@ -262,6 +270,123 @@ class Program
 
                     Console.WriteLine("Cart cleared successfully!");
                     break;
+
+                case 6:
+                    Console.WriteLine("\n*** CHECKOUT ***");
+
+                    if (total == 0)
+                    {
+                        Console.WriteLine("Cart is empty.");
+                        break;
+                    }
+
+                    double finalTotal = total;
+                    double discount = 0;
+
+                    if (total >= 5000)
+                    {
+                        discount = total * 0.10;
+                        finalTotal = total - discount;
+                    }
+
+                    // PAYMENT VALIDATION
+                    double payment = 0;
+
+                    while (true)
+                    {
+                        Console.Write("Enter payment: ");
+                        if (!double.TryParse(Console.ReadLine(), out payment))
+                        {
+                            Console.WriteLine("Invalid input. Enter a number.");
+                            continue;
+                        }
+
+                        if (payment < finalTotal)
+                        {
+                            Console.WriteLine("Insufficient payment.");
+                        }
+                        else break;
+                    }
+
+                    double change = payment - finalTotal;
+
+                    // RECEIPT NUMBER + DATE
+                    string receiptNo = receiptCounter.ToString("D4");
+                    string dateNow = DateTime.Now.ToString("MMMM dd, yyyy hh:mm tt");
+
+                    Console.WriteLine("\n--- RECEIPT ---");
+                    Console.WriteLine($"Receipt No: {receiptNo}");
+                    Console.WriteLine($"Date: {dateNow}\n");
+                    
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        if (cart[i] > 0)
+                        {
+                            Console.WriteLine($"{items[i].Name} x{cart[i]} = ₱{items[i].Price * cart[i]}");
+                        }
+                    }
+
+                    Console.WriteLine($"\nSubtotal: ₱{total}");
+
+                    if (discount > 0)
+                    {
+                        Console.WriteLine($"Discount: ₱{discount}");
+                    }
+
+                    Console.WriteLine($"Final Total: ₱{finalTotal}");
+                    Console.WriteLine($"Payment: ₱{payment}");
+                    Console.WriteLine($"Change: ₱{change}");
+
+                    // SAVE TO ORDER HISTORY
+                    orderHistory[orderCount] = $"Receipt #{receiptNo} - ₱{finalTotal}";
+                    orderCount++;
+                    receiptCounter++;
+
+                    // LOW STOCK ALERT
+                    Console.WriteLine("\n--- LOW STOCK ALERT ---");
+                    foreach (var p in items)
+                    {
+                        if (p.RemainingStock <= 5)
+                        {
+                            Console.WriteLine($"{p.Name} has only {p.RemainingStock} left.");
+                        }
+                    }
+
+                    Console.WriteLine("\nThank you for shopping!");
+
+                    // CLEAR CART AFTER CHECKOUT
+                    for (int i = 0; i < cart.Length; i++)
+                    {
+                        cart[i] = 0;
+                    }
+                    total = 0;
+                    
+                    break;
+
+                case 7:
+                    Console.WriteLine("\n*** ORDER HISTORY ***");
+
+                    if (orderCount == 0)
+                    {
+                        Console.WriteLine("No orders yet.");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < orderCount; i++)
+                        {
+                            Console.WriteLine(orderHistory[i]);
+                        }
+                    }
+                    break; 
+                
+                case 8:
+                    Console.WriteLine("Exiting program...");
+                    return;
+                    
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
+
             }
         }
     }
