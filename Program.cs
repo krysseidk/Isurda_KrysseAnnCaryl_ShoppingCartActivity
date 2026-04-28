@@ -117,5 +117,153 @@ class Program
                 RemainingStock = 30
             },
         };
+
+        int[] cart = new int[10]; // stores quantity of each product added to cart
+        double total = 0; // stores total price of all purchases
+
+       int choice = 0;
+
+       int receiptCounter = 1; // for receipt number 
+
+       string[]orderHistory = new string [50]; // store receipts
+       int orderCount = 0;
+
+       while (choice != 6)
+        {
+            Console.WriteLine("\n===== SHOPPING MENU =====");
+            Console.WriteLine("1. View Products");
+            Console.WriteLine("2. View Cart");
+            Console.WriteLine("3. Add to Cart");
+            Console.WriteLine("4. Remove Item");
+            Console.WriteLine("5. Clear Cart");
+            Console.WriteLine("6. Checkout");
+            Console.Write("Choose: ");
+
+            int.TryParse(Console.ReadLine(), out choice);
+
+            switch (choice)
+            {
+                case 1: 
+                    foreach (var p in items)
+                        p.DisplayProduct();
+                    break;
+                
+                case 2:
+                    Console.WriteLine("\n*** YOUR CART ****");
+
+                    bool empty = true;
+
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        if(cart[i] > 0)
+                        {
+                            Console.WriteLine($"{items [i].Name} x{cart[i]} = ₱{items[i].Price * cart[i]}");
+                            empty = false;
+                        }
+                    }
+
+                    if (empty)
+                    {
+                        Console.WriteLine("Cart is empty.");
+                    }
+
+                    break;
+
+                case 3:
+                    Console.WriteLine("\n*** ADD TO CART ***");
+
+                    Console.Write("Enter product ID: ");
+                    int.TryParse(Console.ReadLine(), out int id);
+
+                    Console.Write("Enter quantity: ");
+                    int.TryParse(Console.ReadLine(), out int qty);
+
+                    Product selected = null;
+
+                     // find product
+                     foreach (var p in items)
+                    {
+                        if (p.Id == id)
+                        {
+                            selected = p;
+                            break;
+                        }
+                    }
+
+                    if (selected == null)
+                    {
+                        Console.WriteLine("Product not found.");
+                        break;
+                    }
+
+                    // stock check
+                    if (selected.RemainingStock < qty)
+                    {
+                        Console.WriteLine("Not enough stock.");
+                        break;
+                    }
+
+                    // add to cart
+                    cart[id - 1] += qty;
+                    selected.RemainingStock -= qty;
+
+                    total += selected.Price * qty;
+
+                    Console.WriteLine("Item added to cart!");
+                    break;
+                
+
+                case 4:
+                    Console.WriteLine("\n*** REMOVE ITEM ***");
+
+                    Console.Write("Enter product ID to remove: ");
+                    int.TryParse(Console.ReadLine(), out int removeId);
+
+                    if (removeId < 1 || removeId > items.Length)
+                    {
+                        Console.WriteLine("Invalid product ID.");
+                        break;
+                    }
+
+                    if (cart[removeId - 1] == 0)
+                    {
+                        Console.WriteLine("Item is not in cart.");
+                        break;
+                    }
+
+                    // get product
+                    Product toRemove = items[removeId - 1];
+
+                    // return stock
+                    toRemove.RemainingStock += cart[removeId - 1];
+
+                    // adjust total
+                    total -= toRemove.Price * cart[removeId - 1];
+
+                    // remove from cart
+                    cart[removeId - 1] = 0;
+
+                    Console.WriteLine("Item removed from cart!");
+                    break;
+
+                case 5:
+                    Console.WriteLine("\n*** CLEAR CART ***");
+
+                    for (int i = 0; i < cart.Length; i++)
+                    {
+                        if (cart[i] > 0) 
+                        {
+                            items[i].RemainingStock += cart[i]; // return stock
+                            cart[i] = 0;
+                        }
+                    }
+
+                     total = 0;
+
+                    Console.WriteLine("Cart cleared successfully!");
+                    break;
+            }
+        }
     }
 }
+
