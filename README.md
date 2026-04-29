@@ -2,21 +2,111 @@
 
 ## A simple C# shopping cart system that lets users select products, enter quantities, manage stock, and generate a receipt with a possible discount.
 
- This is a simple C# console-based shopping cart system that I created as a beginner project to simulate a basic point-of-sale (POS) and inventory management system. It lets users view a list of products, choose items, and enter the quantity they want to buy. The program checks if there is enough stock before adding items to the cart and automatically updates the remaining inventory. It also calculates the total cost of all purchases and applies a 10% discount when the total reaches ₱5000 or more. After checkout, it generates a receipt and shows the updated stock of all products. This project helped me practice C# programming, object-oriented programming (OOP), arrays, loops, and input validation, and it represents a simple version of a shopping cart system, POS system, and inventory management program.
+ This is a simple C# console-based shopping cart system that I created as a beginner project to simulate a basic point-of-sale (POS) and inventory management system. It lets users view a list of products, choose items, and enter the quantity they want to buy.
+
+ The program checks stock availability before adding items to the cart and automatically updates the remaining inventory. It also calculates the total cost of purchases and applies a 10% discount for totals ₱5000 and above. After checkout, it generates a receipt and displays order history and low stock alerts.
+
+ This project helped me practice core C# concepts such as object-oriented programming (OOP), arrays, loops, conditionals, and input validation. Overall, this Part 2 improved the original version by adding better cart handling, checkout processing, and order tracking features.
+
+ ## Part 2 Features 
+• Product Management – Shows products with ID, name, price, category, and available stock.
+• Cart System – Users can add, remove, and clear items in the cart with stock checking.
+• Checkout with Receipt – Displays a full receipt with items, subtotal, discount (if applicable), total, payment, and change.
+•  Discount Feature – Automatically gives 10% discount for ₱5000 and above purchases.
+•  Stock Updates – Product stock updates automatically when items are added or removed.
+•  Low Stock Alert – Warns when a product has 5 or fewer items left.
+• Order History – Saves previous receipts with receipt numbers.
+• Input Validation – Prevents invalid inputs and improves user experience.
+•  Improved Flow – Better structure for menu, cart handling, and checkout process.
+
 
  ## AI Usage in This Project
 
- AI tools (ChatGPT) were used as a learning and debugging assistant during development. It helped me understand C# concepts such as input validation, checkout logic, receipt formatting, and Git troubleshooting. All final implementation and decision-making were done manually by me.
+ AI tools (ChatGPT) were used as a coding assistant during development, mainly for guidance and debugging support. 
 
  Specifically, AI was used for the following:
 
-“What is int.TryParse and how is it used in C#?”
-– Used to understand how int.TryParse works for validating user input and preventing the program from crashing when invalid data is entered.
+• Understand and resolve Git merge conflicts that occurred while combining changes from different branches
+•  Assist in debugging issues in the C# program, especially related to cart updates, checkout logic, and receipt generation.
+• Clarify how certain C# features work such as arrays, loops, conditionals, and input validation using TryParse
 
-• “How do I connect Visual Studio Code to GitHub?”
-– Used to learn how to link my VS Code project to a GitHub repository, including using Git commands like git add, git commit, and git push.
+## Sample Output of the Program
 
-• “How do I debug errors in my C# program?”
-– Used to identify and fix errors in my code by understanding compiler messages, checking logic mistakes, and improving program flow.
+===== SHOPPING MENU =====
+1. View Products
+2. Search Product
+3. Filter by Category
+4. View Cart
+5. Add to Cart
+6. Remove Item
+7. Clear Cart
+8. Checkout
+9. View Order History
+10. Exit
+Choose: 
+
+## Product List 
+1. Lipstick - ₱199 (Stock: 100)
+2. Blush - ₱329 (Stock: 100)
+3. IPhone 17 Pro Max - ₱88990 (Stock: 10)
+4. Ipad A16 - ₱20000 (Stock: 10)
+5. Mermaid Pants - ₱700 (Stock: 20)
+6. Plain White T-Shirt - ₱749 (Stock: 20)
+7. Pancit Canton - ₱20 (Stock: 50)
+8. Purefoods Cornbeef - ₱85 (Stock: 50)
+9. Nivea Lotion - ₱879 (Stock: 10)
+10. Belo Sunscreen - ₱499 (Stock: 30)
+
+### Example Output
+
+===== SHOPPING MENU =====
+1. View Products
+2. Search Product
+3. Filter by Category
+4. View Cart
+5. Add to Cart
+6. Remove Item
+7. Clear Cart
+8. Checkout
+9. View Order History
+10. Exit
+Choose: 5
+
+--- ADD TO CART ---
+Enter product ID: 7
+Enter quantity: 49
+Item added to cart!
+
+===== SHOPPING MENU =====
+1. View Products
+2. Search Product
+3. Filter by Category
+4. View Cart
+5. Add to Cart
+6. Remove Item
+7. Clear Cart
+8. Checkout
+9. View Order History
+10. Exit
+Choose: 8
+
+--- CHECKOUT ---
+Enter payment: 1000 
+
+--- RECEIPT ---
+Receipt No: 0002
+Date: April 30, 2026 12:51 AM
+
+Pancit Canton x49 = ₱980
+
+Subtotal: ₱980
+Final Total: ₱980
+Payment: ₱1000
+Change: ₱20
+
+--- LOW STOCK ALERT ---
+Pancit Canton has only 1 left.
+
+Thank you for shopping!
 
 

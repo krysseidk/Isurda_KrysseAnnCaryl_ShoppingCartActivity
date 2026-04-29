@@ -132,13 +132,15 @@ class Program
         {
             Console.WriteLine("\n===== SHOPPING MENU =====");
             Console.WriteLine("1. View Products");
-            Console.WriteLine("2. View Cart");
-            Console.WriteLine("3. Add to Cart");
-            Console.WriteLine("4. Remove Item");
-            Console.WriteLine("5. Clear Cart");
-            Console.WriteLine("6. Checkout");
-            Console.WriteLine("7. View Order History");
-            Console.WriteLine("8. Exit");
+            Console.WriteLine("2. Search Product");
+            Console.WriteLine("3. Filter by Category");
+            Console.WriteLine("4. View Cart");
+            Console.WriteLine("5. Add to Cart");
+            Console.WriteLine("6. Remove Item");
+            Console.WriteLine("7. Clear Cart");
+            Console.WriteLine("8. Checkout");
+            Console.WriteLine("9. View Order History");
+            Console.WriteLine("10. Exit");
             Console.Write("Choose: ");
 
             int.TryParse(Console.ReadLine(), out choice);
@@ -149,8 +151,56 @@ class Program
                     foreach (var p in items)
                         p.DisplayProduct();
                     break;
-                
+
                 case 2:
+                    Console.Write("Enter product name to search: ");
+                    string search = (Console.ReadLine() ?? "").ToLower();
+
+                    bool hasResult = false; 
+
+                    foreach (var p in items)
+                    {
+                        if (p.Name.ToLower().Contains(search))
+                        {
+                            p.DisplayProduct();
+                            hasResult = true;
+                        }
+                    }
+
+                    if (!hasResult)
+                    {
+                        Console.WriteLine("No product found.");
+                    }
+                    break;
+
+                case 3:
+                    Console.WriteLine("1. Food");
+                    Console.WriteLine("2. Electronics");
+                    Console.WriteLine("3. Clothing");
+                    Console.WriteLine("4. Cosmetics");
+                    Console.WriteLine("5. Personal Care");
+                    Console.Write("Choose category: ");
+
+                    int.TryParse(Console.ReadLine(), out int cat);
+
+                    string category = "";
+
+                    if (cat == 1) category = "Food";
+                    else if (cat == 2) category = "Electronics";
+                    else if (cat == 3) category = "Clothing";
+                    else if (cat == 4) category = "Cosmetics";
+                    else if (cat == 5) category = "Personal Care";
+
+                    foreach (var p in items)
+                    {
+                        if (p.Category == category)
+                        {
+                            p.DisplayProduct();
+                        }
+                    }
+                    break;
+
+                case 4:
                     Console.WriteLine("\n*** YOUR CART ****");
 
                     bool empty = true;
@@ -171,7 +221,7 @@ class Program
 
                     break;
 
-                case 3:
+                case 5:
                     Console.WriteLine("\n*** ADD TO CART ***");
 
                     Console.Write("Enter product ID: ");
@@ -221,7 +271,7 @@ class Program
                     break;
                 
 
-                case 4:
+                case 6:
                     Console.WriteLine("\n*** REMOVE ITEM ***");
 
                     Console.Write("Enter product ID to remove: ");
@@ -254,7 +304,7 @@ class Program
                     Console.WriteLine("Item removed from cart!");
                     break;
 
-                case 5:
+                case 7:
                     Console.WriteLine("\n*** CLEAR CART ***");
 
                     for (int i = 0; i < cart.Length; i++)
@@ -271,7 +321,7 @@ class Program
                     Console.WriteLine("Cart cleared successfully!");
                     break;
 
-                case 6:
+                case 8:
                     Console.WriteLine("\n*** CHECKOUT ***");
 
                     if (total == 0)
@@ -344,12 +394,26 @@ class Program
 
                     // LOW STOCK ALERT
                     Console.WriteLine("\n--- LOW STOCK ALERT ---");
+
+                    bool hasLowStock = false;
+
                     foreach (var p in items)
                     {
-                        if (p.RemainingStock <= 5)
+                        if (p.RemainingStock == 0)
+                        {
+                            Console.WriteLine($"{p.Name} is OUT OF STOCK!");
+                            hasLowStock = true;
+                        }
+                        else if (p.RemainingStock <= 5)
                         {
                             Console.WriteLine($"{p.Name} has only {p.RemainingStock} left.");
+                            hasLowStock = true;
                         }
+                    }
+
+                    if (!hasLowStock)
+                    {
+                        Console.WriteLine("All products are well stocked.");
                     }
 
                     Console.WriteLine("\nThank you for shopping!");
@@ -363,7 +427,7 @@ class Program
                     
                     break;
 
-                case 7:
+                case 9:
                     Console.WriteLine("\n*** ORDER HISTORY ***");
 
                     if (orderCount == 0)
@@ -379,7 +443,7 @@ class Program
                     }
                     break; 
                 
-                case 8:
+                case 10:
                     Console.WriteLine("Exiting program...");
                     return;
                     
