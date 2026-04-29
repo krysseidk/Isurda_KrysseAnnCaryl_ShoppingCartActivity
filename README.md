@@ -32,20 +32,7 @@
 
 ## Sample Output of the Program
 
-===== SHOPPING MENU =====
-1. View Products
-2. Search Product
-3. Filter by Category
-4. View Cart
-5. Add to Cart
-6. Remove Item
-7. Clear Cart
-8. Checkout
-9. View Order History
-10. Exit
-Choose: 
-
-## Product List 
+### Product List 
 1. Lipstick - ₱199 (Stock: 100)
 2. Blush - ₱329 (Stock: 100)
 3. IPhone 17 Pro Max - ₱88990 (Stock: 10)
@@ -57,7 +44,6 @@ Choose:
 9. Nivea Lotion - ₱879 (Stock: 10)
 10. Belo Sunscreen - ₱499 (Stock: 30)
 
-### Example Output
 
 ===== SHOPPING MENU =====
 1. View Products
@@ -72,7 +58,7 @@ Choose:
 10. Exit
 Choose: 5
 
---- ADD TO CART ---
+### ADD TO CART
 Enter product ID: 7
 Enter quantity: 49
 Item added to cart!
@@ -90,7 +76,7 @@ Item added to cart!
 10. Exit
 Choose: 8
 
---- CHECKOUT ---
+### CHECKOUT 
 Enter payment: 1000 
 
 --- RECEIPT ---
@@ -104,7 +90,7 @@ Final Total: ₱980
 Payment: ₱1000
 Change: ₱20
 
---- LOW STOCK ALERT ---
+### LOW STOCK ALERT 
 Pancit Canton has only 1 left.
 
 Thank you for shopping!
