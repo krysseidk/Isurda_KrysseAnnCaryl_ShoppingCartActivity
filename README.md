@@ -10,13 +10,21 @@
 
  ## Part 2 Features 
 • Product Management – Shows products with ID, name, price, category, and available stock.
+
 • Cart System – Users can add, remove, and clear items in the cart with stock checking.
+
 • Checkout with Receipt – Displays a full receipt with items, subtotal, discount (if applicable), total, payment, and change.
+
 •  Discount Feature – Automatically gives 10% discount for ₱5000 and above purchases.
+
 •  Stock Updates – Product stock updates automatically when items are added or removed.
+
 •  Low Stock Alert – Warns when a product has 5 or fewer items left.
+
 • Order History – Saves previous receipts with receipt numbers.
+
 • Input Validation – Prevents invalid inputs and improves user experience.
+
 •  Improved Flow – Better structure for menu, cart handling, and checkout process.
 
 
