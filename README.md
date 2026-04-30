@@ -26,6 +26,8 @@
 
  Specifically, AI was used for the following:
 
-• Understand and resolve Git merge conflicts that occurred while combining changes from different branches
+• Understand and resolve Git merge conflicts that occurred while combining changes from different branches.
+
 •  Assist in debugging issues in the C# program, especially related to cart updates, checkout logic, and receipt generation.
+
 • Clarify how certain C# features work such as arrays, loops, conditionals, and input validation using TryParse
