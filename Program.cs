@@ -22,6 +22,22 @@ class Product
 }
 class Program
 {
+    static string GetYesNo(string message)
+    {
+        string input;
+
+        while (true)
+        {
+            Console.Write(message);
+            input = (Console.ReadLine() ?? "").ToUpper();
+
+            if (input == "Y" || input == "N")
+                return input;
+
+            Console.WriteLine("Invalid input. Please enter Y or N only.");
+        }
+    }
+
     static void Main()
     {
         // list of available products in the store
@@ -268,9 +284,18 @@ class Program
                     total += selected.Price * qty;
 
                     Console.WriteLine("Item added to cart!");
-                    break;
-                
 
+                string again = GetYesNo("Add another item? (Y/N): ");
+
+                if (again == "Y")
+                    {
+                        continue; 
+                    }
+                    else
+                    {
+                        break;
+                    }
+                    
                 case 6:
                     Console.WriteLine("\n*** REMOVE ITEM ***");
 
@@ -307,6 +332,15 @@ class Program
                 case 7:
                     Console.WriteLine("\n*** CLEAR CART ***");
 
+                    string confirm = GetYesNo("Are you sure you want to clear the cart? (Y/N): ");
+
+
+                    if (confirm == "N")
+                    {
+                        Console.WriteLine("Clear cart cancelled.");
+                        break;
+                    }
+
                     for (int i = 0; i < cart.Length; i++)
                     {
                         if (cart[i] > 0) 
@@ -323,6 +357,14 @@ class Program
 
                 case 8:
                     Console.WriteLine("\n*** CHECKOUT ***");
+
+                    string proceed = GetYesNo("Proceed to checkout? (Y/N): ");
+
+                    if (proceed == "N")
+                    {
+                        Console.WriteLine("Checkout cancelled.");
+                        break;
+                    }
 
                     if (total == 0)
                     {
