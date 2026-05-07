@@ -22,6 +22,22 @@ class Product
 }
 class Program
 {
+    static string GetYesNo(string message)
+    {
+        string input;
+
+        while (true)
+        {
+            Console.Write(message);
+            input = (Console.ReadLine() ?? "").ToUpper();
+
+            if (input == "Y" || input == "N")
+                return input;
+
+            Console.WriteLine("Invalid input. Please enter Y or N only.");
+        }
+    }
+
     static void Main()
     {
         // list of available products in the store
@@ -121,160 +137,364 @@ class Program
         int[] cart = new int[10]; // stores quantity of each product added to cart
         double total = 0; // stores total price of all purchases
 
-        Console.WriteLine("===== [PAO'S SHOPPING SYSTEM] ====");
-        Console.WriteLine("\n===== SEARCH OPTIONS =====");
-        Console.WriteLine("1. Search Product by Name");
-        Console.WriteLine("2. Filter by Category");
-        Console.WriteLine("3. Skip");
-        Console.Write("Choose option: ");
+       int choice = 0;
 
-        int searchOption;
-        int.TryParse(Console.ReadLine(), out searchOption);
+       int receiptCounter = 1; // for receipt number 
 
-        if (searchOption == 1)
+       string[]orderHistory = new string [50]; // store receipts
+       int orderCount = 0;
+
+       while (true)
         {
-            Console.Write("\nEnter product name to search: ");
-            string search = Console.ReadLine().ToLower();
+            Console.WriteLine("\n===== SHOPPING MENU =====");
+            Console.WriteLine("1. View Products");
+            Console.WriteLine("2. Search Product");
+            Console.WriteLine("3. Filter by Category");
+            Console.WriteLine("4. View Cart");
+            Console.WriteLine("5. Add to Cart");
+            Console.WriteLine("6. Remove Item");
+            Console.WriteLine("7. Clear Cart");
+            Console.WriteLine("8. Checkout");
+            Console.WriteLine("9. View Order History");
+            Console.WriteLine("10. Exit");
+            Console.Write("Choose: ");
 
-            bool found = false;
+            int.TryParse(Console.ReadLine(), out choice);
 
-            foreach (Product p in items)
+            switch (choice)
             {
-                if (p.Name.ToLower().Contains(search))
-                {
-                    p.DisplayProduct();
-                    found = true;
-                }
-            }
+                case 1: 
+                    foreach (var p in items)
+                        p.DisplayProduct();
+                    break;
 
-            if (!found)
-            {
-                Console.WriteLine("No product found.");
+                case 2:
+                    Console.Write("Enter product name to search: ");
+                    string search = (Console.ReadLine() ?? "").ToLower();
+
+                    bool hasResult = false; 
+
+                    foreach (var p in items)
+                    {
+                        if (p.Name.ToLower().Contains(search))
+                        {
+                            p.DisplayProduct();
+                            hasResult = true;
+                        }
+                    }
+
+                    if (!hasResult)
+                    {
+                        Console.WriteLine("No product found.");
+                    }
+                    break;
+
+                case 3:
+                    Console.WriteLine("1. Food");
+                    Console.WriteLine("2. Electronics");
+                    Console.WriteLine("3. Clothing");
+                    Console.WriteLine("4. Cosmetics");
+                    Console.WriteLine("5. Personal Care");
+                    Console.Write("Choose category: ");
+
+                    int.TryParse(Console.ReadLine(), out int cat);
+
+                    string category = "";
+
+                    if (cat == 1) category = "Food";
+                    else if (cat == 2) category = "Electronics";
+                    else if (cat == 3) category = "Clothing";
+                    else if (cat == 4) category = "Cosmetics";
+                    else if (cat == 5) category = "Personal Care";
+
+                    foreach (var p in items)
+                    {
+                        if (p.Category == category)
+                        {
+                            p.DisplayProduct();
+                        }
+                    }
+                    break;
+
+                case 4:
+                    Console.WriteLine("\n*** YOUR CART ****");
+
+                    bool empty = true;
+
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        if(cart[i] > 0)
+                        {
+                            Console.WriteLine($"{items [i].Name} x{cart[i]} = ₱{items[i].Price * cart[i]}");
+                            empty = false;
+                        }
+                    }
+
+                    if (empty)
+                    {
+                        Console.WriteLine("Cart is empty.");
+                    }
+
+                    break;
+
+                case 5:
+                    Console.WriteLine("\n*** ADD TO CART ***");
+
+                    Console.Write("Enter product ID: ");
+                    int.TryParse(Console.ReadLine(), out int id);
+
+                    if (id < 1 || id > items.Length)
+                    {
+                        Console.WriteLine("Invalid product ID.");
+                        break;
+                    }
+
+                    Console.Write("Enter quantity: ");
+                    int.TryParse(Console.ReadLine(), out int qty);
+
+                    Product? selected = null;
+
+                     // find product
+                     foreach (var p in items)
+                    {
+                        if (p.Id == id)
+                        {
+                            selected = p;
+                            break;
+                        }
+                    }
+
+                    if (selected == null)
+                    {
+                        Console.WriteLine("Product not found.");
+                        break;
+                    }
+
+                    // stock check
+                    if (selected.RemainingStock < qty)
+                    {
+                        Console.WriteLine("Not enough stock.");
+                        break;
+                    }
+                
+                    // add to cart
+                    cart[id - 1] += qty;
+                    selected.RemainingStock -= qty;
+
+                    total += selected.Price * qty;
+
+                    Console.WriteLine("Item added to cart!");
+
+                string again = GetYesNo("Add another item? (Y/N): ");
+
+                if (again == "Y")
+                    {
+                        continue; 
+                    }
+                    else
+                    {
+                        break;
+                    }
+                    
+                case 6:
+                    Console.WriteLine("\n*** REMOVE ITEM ***");
+
+                    Console.Write("Enter product ID to remove: ");
+                    int.TryParse(Console.ReadLine(), out int removeId);
+
+                    if (removeId < 1 || removeId > items.Length)
+                    {
+                        Console.WriteLine("Invalid product ID.");
+                        break;
+                    }
+
+                    if (cart[removeId - 1] == 0)
+                    {
+                        Console.WriteLine("Item is not in cart.");
+                        break;
+                    }
+
+                    // get product
+                    Product toRemove = items[removeId - 1];
+
+                    // return stock
+                    toRemove.RemainingStock += cart[removeId - 1];
+
+                    // adjust total
+                    total -= toRemove.Price * cart[removeId - 1];
+
+                    // remove from cart
+                    cart[removeId - 1] = 0;
+
+                    Console.WriteLine("Item removed from cart!");
+                    break;
+
+                case 7:
+                    Console.WriteLine("\n*** CLEAR CART ***");
+
+                    string confirm = GetYesNo("Are you sure you want to clear the cart? (Y/N): ");
+
+
+                    if (confirm == "N")
+                    {
+                        Console.WriteLine("Clear cart cancelled.");
+                        break;
+                    }
+
+                    for (int i = 0; i < cart.Length; i++)
+                    {
+                        if (cart[i] > 0) 
+                        {
+                            items[i].RemainingStock += cart[i]; // return stock
+                            cart[i] = 0;
+                        }
+                    }
+
+                     total = 0;
+
+                    Console.WriteLine("Cart cleared successfully!");
+                    break;
+
+                case 8:
+                    Console.WriteLine("\n*** CHECKOUT ***");
+
+                    string proceed = GetYesNo("Proceed to checkout? (Y/N): ");
+
+                    if (proceed == "N")
+                    {
+                        Console.WriteLine("Checkout cancelled.");
+                        break;
+                    }
+
+                    if (total == 0)
+                    {
+                        Console.WriteLine("Cart is empty.");
+                        break;
+                    }
+
+                    double finalTotal = total;
+                    double discount = 0;
+
+                    if (total >= 5000)
+                    {
+                        discount = total * 0.10;
+                        finalTotal = total - discount;
+                    }
+
+                    // PAYMENT VALIDATION
+                    double payment = 0;
+
+                    while (true)
+                    {
+                        Console.Write("Enter payment: ");
+                        if (!double.TryParse(Console.ReadLine(), out payment))
+                        {
+                            Console.WriteLine("Invalid input. Enter a number.");
+                            continue;
+                        }
+
+                        if (payment < finalTotal)
+                        {
+                            Console.WriteLine("Insufficient payment.");
+                        }
+                        else break;
+                    }
+
+                    double change = payment - finalTotal;
+
+                    // RECEIPT NUMBER + DATE
+                    string receiptNo = receiptCounter.ToString("D4");
+                    string dateNow = DateTime.Now.ToString("MMMM dd, yyyy hh:mm tt");
+
+                    Console.WriteLine("\n--- RECEIPT ---");
+                    Console.WriteLine($"Receipt No: {receiptNo}");
+                    Console.WriteLine($"Date: {dateNow}\n");
+                    
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        if (cart[i] > 0)
+                        {
+                            Console.WriteLine($"{items[i].Name} x{cart[i]} = ₱{items[i].Price * cart[i]}");
+                        }
+                    }
+
+                    Console.WriteLine($"\nSubtotal: ₱{total}");
+
+                    if (discount > 0)
+                    {
+                        Console.WriteLine($"Discount: ₱{discount}");
+                    }
+
+                    Console.WriteLine($"Final Total: ₱{finalTotal}");
+                    Console.WriteLine($"Payment: ₱{payment}");
+                    Console.WriteLine($"Change: ₱{change}");
+
+                    // SAVE TO ORDER HISTORY
+                    orderHistory[orderCount] = $"Receipt #{receiptNo} - ₱{finalTotal}";
+                    orderCount++;
+                    receiptCounter++;
+
+                    // LOW STOCK ALERT
+                    Console.WriteLine("\n--- LOW STOCK ALERT ---");
+
+                    bool hasLowStock = false;
+
+                    foreach (var p in items)
+                    {
+                        if (p.RemainingStock == 0)
+                        {
+                            Console.WriteLine($"{p.Name} is OUT OF STOCK!");
+                            hasLowStock = true;
+                        }
+                        else if (p.RemainingStock <= 5)
+                        {
+                            Console.WriteLine($"{p.Name} has only {p.RemainingStock} left.");
+                            hasLowStock = true;
+                        }
+                    }
+
+                    if (!hasLowStock)
+                    {
+                        Console.WriteLine("All products are well stocked.");
+                    }
+
+                    Console.WriteLine("\nThank you for shopping!");
+
+                    // CLEAR CART AFTER CHECKOUT
+                    for (int i = 0; i < cart.Length; i++)
+                    {
+                        cart[i] = 0;
+                    }
+                    total = 0;
+                    
+                    break;
+
+                case 9:
+                    Console.WriteLine("\n*** ORDER HISTORY ***");
+
+                    if (orderCount == 0)
+                    {
+                        Console.WriteLine("No orders yet.");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < orderCount; i++)
+                        {
+                            Console.WriteLine(orderHistory[i]);
+                        }
+                    }
+                    break; 
+                
+                case 10:
+                    Console.WriteLine("Exiting program...");
+                    return;
+                    
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
+
             }
-}
-        else if (searchOption == 2)
-        {
-            Console.WriteLine("\nCategory filter not yet implemented (Step 2.3 next).");
         }
-        else
-        {
-            Console.WriteLine("\nSkipping search...\n");
-        }
-
-        Console.WriteLine("Buy ₱5000 and above to get 10% discount!\n");
-        
-        string again = "yes";
-
-        while ((again ?? "").ToLower() == "yes")
-        {
-            Console.WriteLine("\nAvailable Items:");
-
-            // display all products
-            for (int i = 0; i < items.Length; i++)
-            {
-                items[i].DisplayProduct();
-            }
-
-            Console.Write("\nEnter item number: ");
-
-            // validate product selection input
-            if (!int.TryParse(Console.ReadLine(), out int pick) || pick < 1 || pick > items.Length)
-            {
-                Console.WriteLine("Invalid input."); 
-                continue;
-            }
-
-            Console.Write("Enter quantity: ");
-
-            // validate quantity input
-            if (!int.TryParse(Console.ReadLine(), out int qty) || qty <= 0)
-            {
-                Console.WriteLine("Invalid quantity.");
-                continue;
-            }
-
-            Product selected = items[pick - 1];
-
-            // check if stock is enough 
-            if (selected.RemainingStock < qty)
-            {
-                Console.WriteLine("Not enough stock available.");
-                continue;
-            }
-
-            // count how many product slots are already used
-            int usedSlots = 0;
-            for (int i = 0; i < cart.Length; i++)
-            {
-                if (cart[i] > 0) usedSlots++;
-            }
-            
-            if (usedSlots >= cart.Length && cart [pick - 1] == 0)
-            {
-                Console.WriteLine("Cart is full.");
-                continue;
-            }
-
-            // if new item and cart is full
-            if (cart[pick - 1] > 0)
-            {
-                Console.WriteLine("Item already in cart. Updating quantity...");
-            }
-           
-            // proceed to add/update cart
-            cart[pick - 1] += qty;
-            selected.RemainingStock -= qty;
-
-            Console.WriteLine("Item successfully added to cart!");
-
-            // update total price
-            total += selected.Total(qty);
-
-            Console.Write("Do you want to continue? (yes/no): ");
-            again = Console.ReadLine() ?? "no";
-        }
-
-        // apply discount if the total reaches 5000 or more
-        double finalTotal = total;
-        double discount = 0;
-
-        if (total >= 5000)
-        {
-            discount = total * 0.10;
-            finalTotal = total - discount;
-        }
-
-
-        Console.WriteLine("\n--- RECEIPT ---");
-
-        for (int i = 0; i < items.Length; i++)
-        {
-            if (cart[i] > 0)
-            {
-                double subtotal = items[i].Price * cart[i];
-                Console.WriteLine($"{items[i].Name} x{cart[i]} = ₱{subtotal}");
-            }
-}
-
-
-        Console.WriteLine("\nSubtotal: ₱" + total);
-
-        if (discount > 0)
-        {
-            Console.WriteLine("Discount: ₱" + discount);
-            Console.WriteLine("You saved: ₱" + discount);
-        }
-
-        Console.WriteLine("GRAND TOTAL: ₱" + finalTotal); 
-
-        Console.WriteLine("\n--- UPDATED STOCK ---");
-
-        foreach (Product p in items)
-        {
-             p.DisplayProduct(); 
-        }     
-
-        Console.WriteLine("=== THANK YOU AND BUY AGAIN! ===");
-    
     }
 }
+
