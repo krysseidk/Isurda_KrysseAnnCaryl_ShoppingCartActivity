@@ -40,7 +40,11 @@ class Program
 
     static void Main()
     {
-        // list of available products in the store
+        RunProgram();
+    }
+    
+    static void RunProgram()
+    {
         Product[] items =
         {
             new Product
@@ -492,9 +496,9 @@ class Program
                 default:
                     Console.WriteLine("Invalid choice.");
                     break;
-
             }
         }
     }
 }
+    
 
