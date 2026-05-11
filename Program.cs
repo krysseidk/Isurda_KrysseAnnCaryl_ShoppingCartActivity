@@ -2,11 +2,41 @@
 
 class Product
 {
-    public int Id { get; set; } // stores product Id
-    public string Name { get; set; } = ""; // stores product name 
-    public string Category { get; set; } = ""; //stores product category 
-    public double Price { get; set; } // stores product price
-    public int RemainingStock { get; set; } // stores available stock
+    private int id; // stores product Id
+    private string name = ""; // stores product name 
+    private string category = ""; //stores product category 
+    private double price;// stores product price
+    private int remainingStock; // stores available stock
+
+    public int Id
+    {
+        get { return id; }
+        set { id = value; }
+    }
+
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
+
+    public string Category
+    {
+        get { return category; }
+        set { category = value; }
+    }
+
+    public double Price
+    {
+        get { return price; }
+        set { price = value; }
+    }
+
+    public int RemainingStock
+    {
+        get { return remainingStock; }
+        set { remainingStock = value; }
+    }
 
     public void DisplayProduct()
     {
@@ -40,7 +70,11 @@ class Program
 
     static void Main()
     {
-        // list of available products in the store
+        RunProgram();
+    }
+    
+    static void RunProgram()
+    {
         Product[] items =
         {
             new Product
@@ -492,9 +526,9 @@ class Program
                 default:
                     Console.WriteLine("Invalid choice.");
                     break;
-
             }
         }
     }
 }
+    
 
